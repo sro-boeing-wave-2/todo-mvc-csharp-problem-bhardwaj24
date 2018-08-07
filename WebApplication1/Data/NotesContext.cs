@@ -14,5 +14,7 @@ namespace WebApplication1.Models
         }
 
         public DbSet<WebApplication1.Models.Note> Note { get; set; }
+        public DbSet<WebApplication1.Models.checklist> checklist { get; set; }
+        public DbSet<WebApplication1.Models.Labels> Labels { get; set; }
     }
 }
