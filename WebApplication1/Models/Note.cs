@@ -14,6 +14,17 @@ namespace WebApplication1.Models
         public bool pinned { get; set; }
         public List<checklist> check { get; set; }
         public List<Labels> labellist { get; set; }
+
+        public bool IsEquals(Note n)
+        {
+
+            if (NoteTitle == n.NoteTitle && NoteContent == n.NoteContent && pinned == n.pinned && labellist.All(x => n.labellist.Exists(y => y.name == x.name)) && check.All(x => n.check.Exists(y => (y.listcontent == x.listcontent))))
+                return true;
+
+            return false;
+
+
+        }
     }
 
     public class checklist

@@ -38,7 +38,7 @@ namespace WebApplication1
             else
             {
                 services.AddDbContext<NotesContext>(options =>
-               options.UseInMemoryDatabase("InMemoryDataBaseString"));
+               options.UseInMemoryDatabase("NotesContext"));
             }
 
             // Register the Swagger generator, defining 1 or more Swagger documents
