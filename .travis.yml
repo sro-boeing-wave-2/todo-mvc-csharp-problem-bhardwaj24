@@ -1,4 +1,4 @@
-zlanguage: csharp
+language: csharp
 solution: WebApplication1.sln
 notifications:
   email:
