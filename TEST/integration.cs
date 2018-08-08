@@ -160,7 +160,7 @@ namespace XUnitTestProject1
         [Fact]
         public async void TestDelete()
         {
-            var response = await _client.DeleteAsync("api/Notes?Title=this is deleted title");
+            var response =  await _client.DeleteAsync("api/Notes?Title=this is deleted title");
             var responsecode = response.StatusCode;
             Assert.Equal(HttpStatusCode.NoContent, responsecode);
             _context.Note.Should().NotContain("this is deleted title");
