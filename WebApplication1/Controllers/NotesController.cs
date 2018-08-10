@@ -20,20 +20,12 @@ namespace WebApplication1.Controllers
             _context = context;
         }
 
-       //// GET: api/Notes
-       //[HttpGet]
-       // public IEnumerable<Note> GetNote()
-       // {
-       //     return _context.Note.Include(x => x.labellist).Include(y => y.check);
-       // }
-
-        // GET: api/Notes/5
         [HttpGet]
         public IActionResult GetNoteByPrimitive(
              [FromQuery(Name = "Id")] int Id,
              [FromQuery(Name = "Title")] string Title,
              [FromQuery(Name = "text")] string text,
-             [FromQuery(Name = "Pinned")] bool Pinned)
+             [FromQuery(Name = "Pinned")] bool? Pinned)
         {
             if (!ModelState.IsValid)
             {
@@ -43,7 +35,7 @@ namespace WebApplication1.Controllers
             temp = _context.Note.Include(x => x.check).Include(x => x.labellist)
                 .Where(element => element.NoteTitle == ((Title == null) ? element.NoteTitle : Title)
                       && element.NoteContent == ((text == null) ? element.NoteContent : text)
-                      && element.pinned == ((!Pinned) ? element.pinned : Pinned)
+                      && element.pinned == ((Pinned == null) ? element.pinned : Pinned)
                       && element.Id == ((Id == 0) ? element.Id : Id)).ToList();
 
 
@@ -53,22 +45,6 @@ namespace WebApplication1.Controllers
             }
             return Ok(temp);
         }
-        //public async Task<IActionResult> GetNote([FromRoute] int id)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var note = await _context.Note.FindAsync(id);
-
-        //    if (note == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(note);
-        //}
 
         // PUT: api/Notes/5
         [HttpPut("{id}")]
@@ -108,7 +84,7 @@ namespace WebApplication1.Controllers
                         }
                         else
                         {
-                            checklist a = new checklist { listcontent = obj.listcontent};
+                            checklist a = new checklist { listcontent = obj.listcontent };
                             x.check.Add(a);
                         }
                     }
@@ -131,10 +107,6 @@ namespace WebApplication1.Controllers
                 }
             }
 
-            //return CreatedAtAction(nameof(GetNoteByPrimitive), new
-            //{
-            //    note
-            //});
 
             return Ok(note);
         }
@@ -151,7 +123,7 @@ namespace WebApplication1.Controllers
             _context.Note.Add(note);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetNoteByPrimitive),note);
+            return CreatedAtAction(nameof(GetNoteByPrimitive), note);
         }
 
         // DELETE: api/Notes/5
@@ -177,10 +149,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            //_context.Note.Remove(note);
-            //await _context.SaveChangesAsync();
 
-            //return Ok(note);
             temp.ForEach(NoteDel => _context.checklist.RemoveRange(NoteDel.check));
             temp.ForEach(NoteDel => _context.Labels.RemoveRange(NoteDel.labellist));
             _context.Note.RemoveRange(temp);

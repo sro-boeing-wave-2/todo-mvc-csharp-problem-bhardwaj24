@@ -22,40 +22,60 @@ namespace TEST
             _controller = new NotesController(notecontext);
 
             notecontext.Note.AddRange(note);
+            notecontext.Note.AddRange(notebyid);
             notecontext.SaveChanges();
 
         }
         Note TestNotePost = new Note
         {
-            NoteTitle = "Title-2-Deletable",
-            NoteContent = "Message-2-Deletable",
+            NoteTitle = "Title-2",
+            NoteContent = "Message-2",
             check = new List<checklist>()
                       {
-                          new checklist(){ listcontent = "checklist-2-1"},
-                          new checklist(){ listcontent = "checklist-2-2"}
+                          new checklist(){ listcontent = "checklist content 1"},
+                          new checklist(){ listcontent = "checklist content 2"}
                       },
             labellist = new List<Labels>()
                       {
-                          new Labels(){name = "Label-2-1-Deletable"},
-                          new Labels(){ name = "Label-2-2-Deletable"}
+                          new Labels(){name = "label content 1"},
+                          new Labels(){ name = "label content 2"}
                       },
             pinned = false
+        };
+
+        Note notebyid = new Note()
+        {
+            NoteTitle = "this is test title",
+            NoteContent = "some text",
+            labellist = new List<Labels>
+                {
+                    new Labels{ name="My First Tag" },
+                    new Labels{ name = "My second Tag" },
+                    new Labels{ name = "My third Tag" },
+                },
+            check = new List<checklist>
+                {
+                    new checklist{listcontent="first item"},
+                    new checklist{listcontent="second item"},
+                    new checklist{listcontent="third item"},
+                },
+            pinned = true
         };
 
         Note TestNotePut = new Note
         {
             Id = 1,
-            NoteTitle = "Title-1-Deletable",
-            NoteContent = "Message-1-Deletable",
+            NoteTitle = "Title-2",
+            NoteContent = "Message-2",
             check = new List<checklist>()
                       {
-                          new checklist(){ listcontent = "checklist-1"},
-                          new checklist(){ listcontent = "checklist-2"}
+                          new checklist(){ listcontent = "checklist content 1"},
+                          new checklist(){ listcontent = "checklist content 2"}
                       },
             labellist = new List<Labels>()
                       {
-                          new Labels(){name = "Label-1-Deletable"},
-                          new Labels(){name = "Label-2-Deletable"}
+                          new Labels(){name = "label content 1"},
+                          new Labels(){ name = "label content 2"}
                       },
             pinned = false
         };
@@ -85,7 +105,18 @@ namespace TEST
             var result = _controller.GetNoteByPrimitive(0, null, null, true);
             var objectresult = result as OkObjectResult;
             var notes = objectresult.Value as List<Note>;
-            Assert.Equal(2, notes.Count);
+            Assert.Equal(5, notes.Count);
+        }
+
+        [Fact]
+        public async void TestGetByID()
+        {
+
+            var result = _controller.GetNoteByPrimitive(8, null, null, true);
+            var objectresult = result as OkObjectResult;
+            var notes = objectresult.Value as List<Note>;
+            Console.WriteLine(notes);
+            Assert.Equal(notes[0], notebyid);
         }
 
         [Fact]
@@ -100,11 +131,11 @@ namespace TEST
         [Fact]
         public async void Edit()
         {
-            var result =await  _controller.PutNote(1, TestNotePut);
+            var result = await _controller.PutNote(1, TestNotePut);
             var responseOkObject = result as OkObjectResult;
             var note = responseOkObject.Value as Note;
             Assert.Equal(note.Id, TestNotePut.Id);
-            
+
         }
         [Fact]
         public async void Delete()
