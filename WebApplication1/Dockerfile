@@ -15,5 +15,7 @@ FROM microsoft/dotnet:aspnetcore-runtime
 
 WORKDIR /app
 COPY --from=build-env /app/out .
-EXPOSE 80
+COPY --from=build-env /app/*.sh .
 ENTRYPOINT ["dotnet", "WebApplication1.dll"]
+RUN chmod +x ./entrypoint.sh
+CMD /bin/bash ./entrypoint.sh

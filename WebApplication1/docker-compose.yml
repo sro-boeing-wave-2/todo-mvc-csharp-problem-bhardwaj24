@@ -1,0 +1,14 @@
+version: "3"
+services:
+    web:
+        build: .
+        image: googlekeep_test
+        ports:
+            - "5005:80"
+        depends_on:
+            - db
+    db:
+        image: "microsoft/mssql-server-linux"
+        environment:
+            SA_PASSWORD: "Abhishek24"
+            ACCEPT_EULA: "Y"

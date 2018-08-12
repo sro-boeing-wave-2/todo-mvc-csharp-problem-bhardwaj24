@@ -30,10 +30,13 @@ namespace WebApplication1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var connection = @"Server=db;Database=master;User=sa;Password=Abhishek24;";
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            if (_hosting.IsDevelopment())
+            if (_hosting.IsDevelopment() || _hosting.IsEnvironment("Production"))
             {
-                services.AddDbContext<NotesContext>(options => options.UseSqlServer(Configuration.GetConnectionString("NotesContext")));
+                //services.AddDbContext<NotesContext>(options => options.UseSqlServer(Configuration.GetConnectionString("NotesContext")));
+                services.AddDbContext<NotesContext>(options => options.UseSqlServer(connection));
             }
             else
             {
